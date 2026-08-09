@@ -14,9 +14,15 @@ const Badge = ({ role, variant, children, className = '' }) => {
 
   const selectedClass = role ? (roleStyles[role] || roleStyles.volunteer) : (variant || roleStyles.volunteer);
 
+  const formatRoleLabel = (r) => {
+    if (!r) return 'VOLUNTEER';
+    if (r === 'field_worker') return 'FIELD WORKER';
+    return String(r).replace('_', ' ').toUpperCase();
+  };
+
   return (
     <span className={twMerge(clsx(baseStyles, selectedClass, className))}>
-      {children || role || 'volunteer'}
+      {children || formatRoleLabel(role)}
     </span>
   );
 };

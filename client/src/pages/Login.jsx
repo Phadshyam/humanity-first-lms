@@ -170,9 +170,9 @@ const Login = () => {
                                     onChange={handleChange}
                                     className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded text-sm outline-none focus:border-[#176B4D]"
                                 >
-                                    <option value="volunteer">Volunteer / Learner</option>
+                                    <option value="volunteer">Volunteer</option>
                                     <option value="field_worker">Field Worker</option>
-                                    <option value="trainer">Trainer / Instructor</option>
+                                    <option value="trainer">Trainer</option>
                                 </select>
                             </div>
                         )}

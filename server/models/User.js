@@ -23,8 +23,17 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['volunteer', 'field_worker', 'trainer', 'admin'],
-      default: 'volunteer'
+      enum: ['admin', 'trainer', 'volunteer', 'field_worker'],
+      default: 'volunteer',
+      lowercase: true,
+      trim: true,
+      set: function (val) {
+        if (!val) return 'volunteer';
+        const normalized = val.toLowerCase().trim().replace(/\s+/g, '_');
+        return ['admin', 'trainer', 'volunteer', 'field_worker'].includes(normalized)
+          ? normalized
+          : 'volunteer';
+      }
     },
     preferredLanguage: {
       type: String,
