@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, ShieldCheck, UserCheck, AlertTriangle } from 'lucide-react';
+import { ArrowRight, AlertTriangle, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -42,133 +43,135 @@ const Login = () => {
         }
     };
 
-    // Quick Demo Login Helper
-    const handleDemoLogin = async (email) => {
-        setError('');
-        setLoading(true);
-        try {
-            await login(email, 'password123');
-            navigate('/');
-        } catch (err) {
-            setError('Demo login failed. Please ensure your backend server and database are running.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return (
-        <main className="min-h-screen grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] bg-[#F5F1E8] text-[#24302B]">
+        <main className="min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1fr] bg-[#F9F8F3] text-[#24302B]">
             {/* Left Hero Sidebar */}
-            <div className="bg-[#176B4D] text-[#FFFDF7] p-8 lg:p-14 flex flex-col justify-between min-h-[320px] lg:min-h-screen">
-                <a href="/" className="flex items-center gap-3 text-[#FFFDF7] no-underline">
-                    <span className="w-8 h-8 rounded-full bg-[#FFFDF7] text-[#176B4D] grid place-items-center font-bold text-lg -rotate-[30deg]">
-                        ⌁
-                    </span>
+            <div className="bg-gradient-to-br from-[#0F4C3A] via-[#145B45] to-[#196B52] text-[#FFFDF7] p-8 lg:p-16 flex flex-col justify-between min-h-[360px] lg:min-h-screen relative overflow-hidden">
+                {/* Embedded SVG Brand Logo & Header */}
+                <a href="/" className="flex items-center gap-3.5 text-[#FFFDF7] no-underline z-10">
+                    <div className="w-10 h-10 rounded-xl bg-[#14583E] border border-[#F0C1A8]/30 flex items-center justify-center shadow-inner shrink-0">
+                        <svg className="w-6 h-6 text-[#F0C1A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                            <path d="M2 12l10 5 10-5" />
+                        </svg>
+                    </div>
                     <div>
-                        <b className="block text-base tracking-tight font-heading">Humanity First</b>
-                        <small className="block font-mono text-[10px] tracking-widest text-[#B7D9C5] uppercase">
-                            LEARNING HUB
+                        <b className="block text-lg font-bold tracking-tight font-heading leading-none">Humanity First</b>
+                        <small className="block font-mono text-[10px] tracking-widest text-[#B7D9C5] uppercase mt-1">
+                            LEARNING PLATFORM
                         </small>
                     </div>
                 </a>
 
-                <div className="my-auto py-8 max-w-[560px]">
-                    <span className="font-mono text-xs tracking-widest text-[#B7D9C5] block mb-3 uppercase">
-                        FIELD MANUAL / 2026
-                    </span>
-                    <h1 className="text-4xl lg:text-6xl font-heading font-bold leading-tight mb-4 tracking-tight">
-                        Learn with purpose.<br />
-                        <em className="not-italic text-[#F0C1A8]">Lead with care.</em>
+                {/* Hero Message */}
+                <div className="my-auto py-10 max-w-[500px] z-10">
+                    <h1 className="text-3xl lg:text-5xl font-heading font-extrabold leading-tight mb-5 tracking-tight text-[#FFFDF7]">
+                        Empowering Communities Through Purposeful Learning.
                     </h1>
-                    <p className="text-base lg:text-lg leading-relaxed text-[#CFE4D5] max-w-[420px] mb-8">
-                        A practical learning space for the people who make community action possible.
+                    <p className="text-base lg:text-lg leading-relaxed text-[#CFE4D5] font-sans">
+                        Access training modules, track field progress, and collaborate with team members.
                     </p>
-                    <div className="h-px bg-[#6CAA8A] w-24 my-6"></div>
-                    <span className="font-mono text-xs tracking-widest text-[#B7D9C5] uppercase">
-                        HUMANITY FIRST NGO
-                    </span>
                 </div>
+
+                {/* Subtle Background Decorative Blur */}
+                <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#176B4D] rounded-full filter blur-3xl opacity-50 pointer-events-none"></div>
             </div>
 
             {/* Right Form Panel */}
-            <section className="grid place-items-center p-6 lg:p-12 bg-[#F5F1E8]">
-                <div className="max-w-[400px] w-full">
-                    <span className="font-mono text-xs tracking-widest text-[#5C665F] uppercase block mb-1">
-                        {isRegister ? 'JOIN THE NETWORK' : 'WELCOME BACK'}
-                    </span>
-                    <h2 className="text-3xl font-heading font-bold mb-2">
-                        {isRegister ? 'Begin your orientation.' : 'Continue your learning.'}
-                    </h2>
-                    <p className="text-[#5C665F] text-sm mb-6">
-                        {isRegister
-                            ? 'Create an account for staff and volunteers.'
-                            : 'Your next useful step is waiting.'}
-                    </p>
+            <section className="grid place-items-center p-6 lg:p-14 bg-[#F9F8F3]">
+                <div className="max-w-[420px] w-full bg-[#FFFDF7] p-8 lg:p-10 rounded-2xl border border-[#D4CEC0] shadow-sm">
+                    <div className="mb-6">
+                        <h2 className="text-2xl lg:text-3xl font-heading font-extrabold text-[#24302B] tracking-tight">
+                            {isRegister ? 'Create an account' : 'Welcome Back'}
+                        </h2>
+                        <p className="text-[#5C665F] text-xs lg:text-sm mt-1.5 font-sans">
+                            {isRegister
+                                ? 'Join Humanity First Learning Hub'
+                                : 'Sign in to your account to continue'}
+                        </p>
+                    </div>
 
                     {/* Session Expired Warning Banner */}
                     {isSessionExpired && !error && (
-                        <div className="bg-[#FFF3CD] text-[#856404] p-3.5 text-xs font-semibold rounded-xl mb-4 border border-[#FFEEBA] flex items-center gap-2 shadow-xs">
-                            <AlertTriangle className="w-4 h-4 text-[#856404] shrink-0" />
-                            <span>Your 3-hour session expired. Please log in to continue.</span>
+                        <div className="bg-[#FFF8E6] text-[#8C6B1B] p-3.5 text-xs font-semibold rounded-xl mb-5 border border-[#F5E6BF] flex items-center gap-2.5 shadow-xs">
+                            <AlertTriangle className="w-4 h-4 text-[#8C6B1B] shrink-0" />
+                            <span>Your 3-hour session expired. Please log in again to continue.</span>
                         </div>
                     )}
 
                     {error && (
-                        <div className="bg-[#F5D8D5] text-[#A94442] p-3 text-sm rounded mb-4 border border-[#E8B4B0]">
+                        <div className="bg-[#FDF2F2] text-[#9B1C1C] p-3.5 text-xs font-semibold rounded-xl mb-5 border border-[#FDE8E8]">
                             {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="grid gap-4">
+                    <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
                         {isRegister && (
                             <div>
-                                <label className="block text-xs font-semibold mb-1">Full name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    required
-                                    placeholder="Your full name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded text-sm outline-none focus:border-[#176B4D]"
-                                />
+                                <label className="block text-xs font-semibold text-[#24302B] mb-1.5">Full name</label>
+                                <div className="relative">
+                                    <User className="w-4 h-4 text-[#8C9690] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        required
+                                        placeholder="Enter your full name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="w-full pl-10 pr-3.5 py-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded-xl text-sm outline-none focus:border-[#176B4D] focus:ring-1 focus:ring-[#176B4D] transition-all"
+                                    />
+                                </div>
                             </div>
                         )}
 
                         <div>
-                            <label className="block text-xs font-semibold mb-1">Email address</label>
-                            <input
-                                type="email"
-                                name="email"
-                                required
-                                placeholder="you@example.org"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded text-sm outline-none focus:border-[#176B4D]"
-                            />
+                            <label className="block text-xs font-semibold text-[#24302B] mb-1.5">Email address</label>
+                            <div className="relative">
+                                <Mail className="w-4 h-4 text-[#8C9690] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    required
+                                    placeholder="you@example.org"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-3.5 py-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded-xl text-sm outline-none focus:border-[#176B4D] focus:ring-1 focus:ring-[#176B4D] transition-all"
+                                />
+                            </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold mb-1">Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                required
-                                placeholder="8 characters minimum (with a number or symbol)"
-                                value={formData.password}
-                                onChange={handleChange}
-                                className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded text-sm outline-none focus:border-[#176B4D]"
-                            />
+                            <label className="block text-xs font-semibold text-[#24302B] mb-1.5">Password</label>
+                            <div className="relative">
+                                <Lock className="w-4 h-4 text-[#8C9690] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    required
+                                    placeholder="Minimum 8 characters"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-10 py-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded-xl text-sm outline-none focus:border-[#176B4D] focus:ring-1 focus:ring-[#176B4D] transition-all"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C9690] hover:text-[#24302B] border-0 bg-transparent cursor-pointer p-0.5"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                            </div>
                         </div>
 
                         {isRegister && (
                             <div>
-                                <label className="block text-xs font-semibold mb-1">Joining as</label>
+                                <label className="block text-xs font-semibold text-[#24302B] mb-1.5">Joining as</label>
                                 <select
                                     name="role"
                                     value={formData.role}
                                     onChange={handleChange}
-                                    className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded text-sm outline-none focus:border-[#176B4D]"
+                                    className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded-xl text-sm outline-none focus:border-[#176B4D] focus:ring-1 focus:ring-[#176B4D] cursor-pointer transition-all"
                                 >
                                     <option value="volunteer">Volunteer</option>
                                     <option value="field_worker">Field Worker</option>
@@ -180,64 +183,31 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full mt-2 bg-[#176B4D] hover:bg-[#C96B3C] text-[#FFFDF7] font-semibold p-3.5 rounded flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                            className="w-full mt-3 bg-[#176B4D] hover:bg-[#14583E] text-[#FFFDF7] font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-[#176B4D]/15 disabled:opacity-50 text-sm"
                         >
                             {loading
                                 ? 'Processing...'
                                 : isRegister
                                     ? 'Create account'
-                                    : 'Log in'}
+                                    : 'Log In'}
                             <ArrowRight className="w-4 h-4" />
                         </button>
                     </form>
 
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setIsRegister(!isRegister);
-                            setError('');
-                        }}
-                        className="text-[#176B4D] text-xs font-semibold border-0 bg-transparent cursor-pointer my-5 mx-auto block hover:underline"
-                    >
-                        {isRegister
-                            ? 'Already have an account? Log in'
-                            : 'New to Humanity First? Create an account'}
-                    </button>
-
-                    {/* Discreet Demo Login Shortcuts */}
-                    <div className="mt-2 pt-4 border-t border-[#D4CEC0] text-center">
-                        <span className="font-mono text-[10px] text-[#5C665F] uppercase block mb-2">
-                            Quick Demo Login
-                        </span>
-                        <div className="flex justify-center gap-2 flex-wrap">
-                            <button
-                                type="button"
-                                onClick={() => handleDemoLogin('volunteer@humanityfirst.org')}
-                                className="text-xs bg-[#D8E8DD] text-[#176B4D] px-2.5 py-1 rounded font-medium border-0 cursor-pointer hover:bg-[#176B4D] hover:text-[#FFFDF7] transition-all flex items-center gap-1"
-                            >
-                                <UserCheck className="w-3 h-3" /> Volunteer
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleDemoLogin('shyamphad03@gmail.com')}
-                                className="text-xs bg-[#E9E4D8] text-[#24302B] px-2.5 py-1 rounded font-medium border-0 cursor-pointer hover:bg-[#176B4D] hover:text-[#FFFDF7] transition-all flex items-center gap-1"
-                            >
-                                <UserCheck className="w-3 h-3" /> Trainer
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleDemoLogin('admin@humanityfirst.org')}
-                                className="text-xs bg-[#F0D4C3] text-[#C96B3C] px-2.5 py-1 rounded font-medium border-0 cursor-pointer hover:bg-[#C96B3C] hover:text-[#FFFDF7] transition-all flex items-center gap-1"
-                            >
-                                <UserCheck className="w-3 h-3" /> Admin
-                            </button>
-                        </div>
+                    <div className="mt-6 pt-5 border-t border-[#D4CEC0]/60 text-center">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsRegister(!isRegister);
+                                setError('');
+                            }}
+                            className="text-[#176B4D] hover:text-[#14583E] text-xs font-semibold border-0 bg-transparent cursor-pointer hover:underline transition-all"
+                        >
+                            {isRegister
+                                ? 'Already have an account? Log in'
+                                : "Don't have an account? Sign up"}
+                        </button>
                     </div>
-
-                    <p className="border-t border-[#D4CEC0] pt-4 mt-4 text-[#5C665F] text-xs flex items-center justify-center gap-1.5 text-center">
-                        <ShieldCheck className="w-4 h-4 text-[#176B4D]" />
-                        Your learning data is kept private and secure.
-                    </p>
                 </div>
             </section>
         </main>
