@@ -54,10 +54,30 @@ app.use(async (req, res, next) => {
     console.error('[DB Middleware Error]:', err.message);
     return res.status(500).json({
       success: false,
-      message: 'Database connection failed. Please verify MONGO_URI in Vercel Environment Variables.',
-      error: err.message
+      message: 'Database connection failed. Please set MONGO_URI in Vercel Environment Variables.',
+      error: err.message,
+      hasMongoUri: !!process.env.MONGO_URI
     });
   }
+});
+
+// Root Endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Humanity First LMS API Server is operational',
+    databaseState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    hasMongoUriEnv: !!process.env.MONGO_URI,
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      courses: '/api/courses',
+      quizzes: '/api/quizzes',
+      progress: '/api/progress',
+      admin: '/api/admin',
+      forum: '/api/forum'
+    }
+  });
 });
 
 // Health Check Endpoint
@@ -65,6 +85,8 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     message: 'Humanity First LMS API Server is operational',
+    databaseState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    hasMongoUriEnv: !!process.env.MONGO_URI,
     timestamp: new Date()
   });
 });
