@@ -46,4 +46,13 @@ api.interceptors.response.use(
   }
 );
 
+export const adminApi = {
+  getStats: () => api.get('/admin/stats'),
+  getUsers: () => api.get('/admin/users'),
+  createUser: (userData) => api.post('/admin/users', userData),
+  updateUserRole: (userId, role) => api.put(`/admin/users/${userId}/role`, { role }),
+  deleteUser: (userId) => api.delete(`/admin/users/${userId}`),
+  exportCSV: () => api.get('/admin/export-csv', { responseType: 'blob' })
+};
+
 export default api;

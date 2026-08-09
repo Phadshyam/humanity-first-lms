@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Download, Users, Activity, Award, CheckCircle2 } from 'lucide-react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import MetricCard from '../components/common/MetricCard';
 import Button from '../components/common/Button';
 import ContentManager from '../components/admin/ContentManager';
@@ -10,6 +11,7 @@ import UserDirectory from '../components/admin/UserDirectory';
 
 const AdminDashboard = () => {
   const location = useLocation();
+  const { user: currentUser } = useAuth();
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [course, setCourse] = useState(null);
@@ -59,6 +61,42 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error('[AdminDashboard] Error exporting CSV:', err);
       alert('Failed to export CSV report.');
+    }
+  };
+
+  const handleAddUser = async (userData) => {
+    try {
+      const res = await api.post('/admin/users', userData);
+      if (res.data && res.data.success) {
+        await fetchAdminData();
+      }
+    } catch (err) {
+      console.error('[AdminDashboard] Error adding user:', err);
+      throw err;
+    }
+  };
+
+  const handleUpdateRole = async (userId, newRole) => {
+    try {
+      const res = await api.put(`/admin/users/${userId}/role`, { role: newRole });
+      if (res.data && res.data.success) {
+        await fetchAdminData();
+      }
+    } catch (err) {
+      console.error('[AdminDashboard] Error updating role:', err);
+      alert(err.response?.data?.message || 'Failed to update user role');
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      const res = await api.delete(`/admin/users/${userId}`);
+      if (res.data && res.data.success) {
+        await fetchAdminData();
+      }
+    } catch (err) {
+      console.error('[AdminDashboard] Error deleting user:', err);
+      alert(err.response?.data?.message || 'Failed to delete user');
     }
   };
 
@@ -155,8 +193,14 @@ const AdminDashboard = () => {
         <QuizPerformance moduleStats={moduleStatsList} />
       </div>
 
-      {/* Full-Width People Directory */}
-      <UserDirectory users={users} />
+      {/* Full-Width People Directory with Interactive User Management */}
+      <UserDirectory
+        users={users}
+        onAddUser={handleAddUser}
+        onUpdateRole={handleUpdateRole}
+        onDeleteUser={handleDeleteUser}
+        currentUser={currentUser}
+      />
     </div>
   );
 };
