@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
-  GraduationCap, 
   LayoutDashboard, 
   BookOpen, 
   Users, 
@@ -9,18 +8,14 @@ import {
   ShieldCheck, 
   Globe, 
   LogOut,
-  X,
-  Zap,
-  WifiOff
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { useBandwidth } from '../../context/BandwidthContext';
 
 const Sidebar = ({ mobileOpen, setMobileOpen }) => {
   const { user, logout } = useAuth();
   const { t, language, cycleLanguage } = useLanguage();
-  const { isLowBandwidth, toggleLowBandwidth } = useBandwidth();
 
   const isTrainerOrAdmin = user && (user.role === 'trainer' || user.role === 'admin');
 
@@ -36,21 +31,27 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
       {/* Brand Header */}
       <div>
         <div className="flex items-center justify-between pb-6 mb-6 border-b border-line-border pt-2">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-forest-green text-surface rounded-lg shadow-xs">
-              <GraduationCap className="w-5 h-5" />
+          <a href="/" className="flex items-center gap-3 no-underline">
+            <div className="w-9 h-9 rounded-xl bg-[#14583E] border border-[#F0C1A8]/30 flex items-center justify-center shadow-inner shrink-0">
+              <svg className="w-5 h-5 text-[#F0C1A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
             </div>
             <div>
-              <span className="text-xs font-mono font-bold tracking-widest text-terracotta uppercase">Humanity First</span>
-              <h2 className="text-base font-extrabold font-heading text-forest-green leading-none">LEARNING HUB</h2>
+              <b className="block text-sm font-bold tracking-tight font-heading text-[#176B4D] leading-none">Humanity First</b>
+              <small className="block font-mono text-[9px] tracking-widest text-[#C96B3C] uppercase mt-1 font-bold">
+                LEARNING HUB
+              </small>
             </div>
-          </div>
+          </a>
 
           {/* Close drawer button for mobile */}
           {setMobileOpen && (
             <button 
               onClick={() => setMobileOpen(false)}
-              className="md:hidden p-1 text-muted-text hover:text-ink"
+              className="md:hidden p-1 text-muted-text hover:text-ink cursor-pointer border-0 bg-transparent"
             >
               <X className="w-5 h-5" />
             </button>
@@ -99,38 +100,17 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
         )}
       </div>
 
-      {/* Footer Controls: Data Saver Toggle, Language Toggle & Logout */}
-      <div className="pt-4 border-t border-line-border space-y-2">
-        {/* Data Saver Mode Toggle Button */}
-        <button
-          onClick={toggleLowBandwidth}
-          className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition border ${
-            isLowBandwidth 
-              ? 'bg-terracotta-soft text-terracotta border-terracotta/30' 
-              : 'bg-alt-bg text-ink border-line-border hover:bg-line-border'
-          }`}
-          title="Toggle low bandwidth mode to disable video streaming"
-        >
-          <span className="flex items-center gap-1.5">
-            {isLowBandwidth ? <WifiOff className="w-3.5 h-3.5" /> : <Zap className="w-3.5 h-3.5 text-forest-green" />}
-            Data Saver
-          </span>
-          <span className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold ${
-            isLowBandwidth ? 'bg-terracotta text-surface' : 'bg-surface text-muted-text border border-line-border'
-          }`}>
-            {isLowBandwidth ? 'ON' : 'OFF'}
-          </span>
-        </button>
-
+      {/* Footer Controls: Language Switcher & Logout */}
+      <div className="pt-4 border-t border-neutral-200 space-y-2">
         {/* Language Switcher */}
         <button
           onClick={cycleLanguage}
-          className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-alt-bg text-ink text-xs font-bold font-mono hover:bg-line-border transition"
+          className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-neutral-200 bg-white/80 text-neutral-600 text-xs font-medium hover:bg-neutral-50 transition-colors cursor-pointer"
         >
           <span className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-forest-green" /> Language
+            <Globe className="w-4 h-4 text-emerald-600" /> Language
           </span>
-          <span className="px-2 py-0.5 bg-surface text-forest-green rounded font-semibold border border-line-border uppercase">
+          <span className="px-2 py-0.5 bg-neutral-100 text-emerald-700 rounded font-mono font-semibold border border-neutral-200 uppercase text-[10px]">
             {language}
           </span>
         </button>
@@ -138,7 +118,7 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
         {/* Logout Button */}
         <button
           onClick={logout}
-          className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-terracotta hover:bg-terracotta-soft text-xs font-bold transition"
+          className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-terracotta hover:bg-terracotta-soft text-xs font-bold transition cursor-pointer border-0 bg-transparent"
         >
           <LogOut className="w-4 h-4" />
           <span>{t('LOGOUT')}</span>

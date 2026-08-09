@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   BookOpen, 
   Award, 
@@ -12,8 +12,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import MetricCard from '../components/common/MetricCard';
-import Button from '../components/common/Button';
-import Badge from '../components/common/Badge';
 import api from '../services/api';
 
 const Overview = () => {
@@ -89,18 +87,14 @@ const Overview = () => {
           <h1 className="text-2xl md:text-3xl font-extrabold font-heading text-[#24302B]">
             Welcome back, {user?.name || 'Volunteer'} 👋
           </h1>
-          <p className="text-xs md:text-sm text-[#5C665F] mt-1 font-sans">
+          <p className="text-sm text-neutral-500 font-medium mt-1 font-sans">
             {todayDateStr} • Humanity First Field Readiness Hub
           </p>
         </div>
-
-        <div className="flex items-center gap-2">
-          <Badge role={user?.role}>{user?.role || 'volunteer'}</Badge>
-        </div>
       </div>
 
-      {/* Hero Spotlight Card (Deep Forest Green #176B4D) */}
-      <div className="bg-[#176B4D] text-[#FFFDF7] rounded-2xl p-6 md:p-8 shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* Hero Spotlight Card (Refined Dark Green #0F4C3A) */}
+      <div className="bg-[#0F4C3A] text-[#FFFDF7] rounded-2xl p-8 shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-4 max-w-xl z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFFDF7]/20 text-[#FFFDF7] text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" /> FEATURED ORIENTATION PROGRAM
@@ -115,13 +109,13 @@ const Overview = () => {
           </p>
 
           <div className="pt-2">
-            <Button
-              variant="outline"
+            <button
               onClick={handleContinueLearning}
-              className="bg-[#FFFDF7] text-[#176B4D] hover:bg-[#D8E8DD] border-transparent font-bold gap-2 shadow-xs"
+              className="bg-white hover:bg-neutral-100 text-[#0F4C3A] font-bold py-3 px-5 rounded-xl transition-colors gap-2 shadow-xs border-0 cursor-pointer flex items-center text-xs md:text-sm"
             >
-              Continue Learning <ArrowRight className="w-4 h-4" />
-            </Button>
+              <span>{progressPercent > 0 ? 'Continue Learning' : 'Start Program'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
@@ -152,7 +146,7 @@ const Overview = () => {
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             <span className="text-2xl font-extrabold font-heading text-[#FFFDF7]">{progressPercent}%</span>
-            <span className="text-[10px] font-mono uppercase text-[#FFFDF7]/80">Completed</span>
+            <span className="text-[10px] font-mono uppercase text-[#FFFDF7]/80 font-bold">Completed</span>
           </div>
         </div>
       </div>
@@ -160,23 +154,25 @@ const Overview = () => {
       {/* Interactive Metrics Summary Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Clickable Modules Card */}
-        <div onClick={() => navigate('/course')} className="cursor-pointer transition hover:opacity-95">
+        <div onClick={() => navigate('/course')}>
           <MetricCard
             title="MODULES COMPLETED"
             value={`${completedCount} / ${totalModulesCount}`}
             subtext={`${totalModulesCount - completedCount} remaining to finish`}
             icon={BookOpen}
+            iconBgClass="bg-emerald-50 text-emerald-600"
           />
         </div>
 
         {/* Clickable Progress Card */}
-        <div onClick={() => navigate('/course')} className="cursor-pointer transition hover:opacity-95">
+        <div onClick={() => navigate('/course')}>
           <MetricCard
             title="OVERALL PROGRESS"
             value={`${progressPercent}%`}
             subtext="Updated in real time"
             highlight={progressPercent > 0}
             icon={CheckCircle2}
+            iconBgClass="bg-sky-50 text-sky-600"
           />
         </div>
 
@@ -186,16 +182,18 @@ const Overview = () => {
           value={`${quizAttemptsCount}`}
           subtext="Knowledge check logs"
           icon={HelpCircle}
+          iconBgClass="bg-amber-50 text-amber-600"
         />
 
         {/* Clickable Certificate Card */}
-        <div onClick={() => navigate('/certificate')} className="cursor-pointer transition hover:opacity-95">
+        <div onClick={() => navigate('/certificate')}>
           <MetricCard
             title="CERTIFICATE STATUS"
             value={isCertificateUnlocked ? 'UNLOCKED' : 'IN PROGRESS'}
             subtext={isCertificateUnlocked ? 'Verified credential available' : 'Complete 100% to claim'}
             highlight={isCertificateUnlocked}
             icon={Award}
+            iconBgClass="bg-purple-50 text-purple-600"
           />
         </div>
       </div>
@@ -203,37 +201,35 @@ const Overview = () => {
       {/* Bottom Grid: Field Philosophy & Certificate Box */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Field Guide Quote Card */}
-        <div className="md:col-span-2 bg-[#FFFDF7] p-6 rounded-2xl border border-[#D4CEC0] space-y-3 relative shadow-xs">
-          <Quote className="w-8 h-8 text-[#C96B3C]/30 absolute top-4 right-4" />
+        <div className="md:col-span-2 border-l-4 border-emerald-600 bg-white shadow-sm rounded-r-xl p-6 space-y-3 relative">
+          <Quote className="w-8 h-8 text-emerald-600/20 absolute top-4 right-4" />
           <h3 className="text-base font-extrabold font-heading text-[#24302B] flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-[#176B4D]" /> Humanitarian Operational Philosophy
+            <ShieldCheck className="w-5 h-5 text-emerald-600" /> Humanitarian Operational Philosophy
           </h3>
-          <blockquote className="text-xs md:text-sm text-[#5C665F] italic leading-relaxed font-sans">
+          <blockquote className="italic text-neutral-700 leading-relaxed font-sans text-xs md:text-sm">
             "Service to humanity requires not just empathy, but rigorous field readiness, dignity in interaction, and absolute adherence to safety codes."
           </blockquote>
-          <p className="text-xs font-mono font-bold text-[#176B4D]">— Humanity First Training Charter 2026</p>
+          <p className="text-xs font-mono font-bold text-emerald-700">— Humanity First Training Charter 2026</p>
         </div>
 
         {/* Certificate Action Box */}
-        <div className="bg-[#FFFDF7] p-6 rounded-2xl border border-[#D4CEC0] flex flex-col justify-between space-y-4 shadow-xs">
+        <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 flex flex-col justify-between space-y-4 shadow-xs">
           <div>
-            <div className="flex items-center gap-2 text-[#176B4D] font-bold text-sm font-heading mb-1">
+            <div className="flex items-center gap-2 text-emerald-700 font-bold text-sm font-heading mb-1">
               <Award className="w-5 h-5" /> Earn Certificate
             </div>
-            <p className="text-xs text-[#5C665F] font-sans">
+            <p className="text-xs text-neutral-500 font-sans leading-relaxed">
               Pass each module quiz with 80%+ to issue your cryptographic verification credential.
             </p>
           </div>
 
-          <Button
-            variant={isCertificateUnlocked ? 'primary' : 'quiet'}
-            size="sm"
+          <button
             onClick={() => navigate('/certificate')}
-            className="w-full justify-between"
+            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-medium px-4 py-2.5 rounded-lg transition-colors flex items-center justify-between w-full border-0 cursor-pointer text-xs"
           >
             <span>{isCertificateUnlocked ? 'View Certificate' : 'Check Eligibility'}</span>
             <ArrowRight className="w-4 h-4" />
-          </Button>
+          </button>
         </div>
       </div>
     </div>
