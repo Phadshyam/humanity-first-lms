@@ -53,14 +53,12 @@ const UserDirectory = ({ users = [], onAddUser, onUpdateRole, onDeleteUser, curr
           <span className="text-xs font-mono font-extrabold text-[#C96B3C] bg-[#E9E4D8] px-2.5 py-1 rounded">
             {users.length} RECORDS
           </span>
-          {onAddUser && (
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-[#176B4D] hover:bg-[#C96B3C] text-[#FFFDF7] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <UserPlus className="w-3.5 h-3.5" /> Add User
-            </button>
-          )}
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-[#176B4D] hover:bg-[#C96B3C] text-[#FFFDF7] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+          >
+            <UserPlus className="w-3.5 h-3.5" /> Add User
+          </button>
         </div>
       </div>
 
@@ -96,28 +94,22 @@ const UserDirectory = ({ users = [], onAddUser, onUpdateRole, onDeleteUser, curr
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  {onUpdateRole ? (
-                    <select
-                      value={user.role}
-                      onChange={(e) => onUpdateRole(user._id, e.target.value)}
-                      className="text-[11px] font-mono font-semibold bg-[#FFFDF7] border border-[#D4CEC0] text-[#24302B] py-1 px-2 rounded-md outline-none focus:border-[#176B4D] cursor-pointer"
-                    >
-                      <option value="volunteer">Volunteer</option>
-                      <option value="field_worker">Field Worker</option>
-                      <option value="trainer">Trainer</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  ) : (
-                    <Badge role={user.role} className="shrink-0">
-                      {user.role}
-                    </Badge>
-                  )}
+                  <select
+                    value={user.role || 'volunteer'}
+                    onChange={(e) => onUpdateRole && onUpdateRole(user._id, e.target.value)}
+                    className="text-[11px] font-mono font-semibold bg-[#FFFDF7] border border-[#D4CEC0] text-[#24302B] py-1 px-2 rounded-md outline-none focus:border-[#176B4D] cursor-pointer"
+                  >
+                    <option value="volunteer">Volunteer</option>
+                    <option value="field_worker">Field Worker</option>
+                    <option value="trainer">Trainer</option>
+                    <option value="admin">Admin</option>
+                  </select>
 
-                  {onDeleteUser && !isSelf && (
+                  {!isSelf && (
                     <button
                       onClick={() => {
                         if (window.confirm(`Are you sure you want to delete user "${user.name}"?`)) {
-                          onDeleteUser(user._id);
+                          if (onDeleteUser) onDeleteUser(user._id);
                         }
                       }}
                       title="Delete User"
