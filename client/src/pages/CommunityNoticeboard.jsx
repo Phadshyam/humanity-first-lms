@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, Plus, Trash2, Calendar, User as UserIcon, MessageCircle } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, MessageCircle } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
 import Toast from '../components/common/Toast';
 import NewTopicModal from '../components/forum/NewTopicModal';
@@ -85,33 +84,32 @@ const CommunityNoticeboard = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold font-heading text-[#24302B]">
+          <h1 className="text-2xl md:text-3xl font-extrabold font-heading text-neutral-900">
             Learn together.
           </h1>
-          <p className="text-xs md:text-sm text-[#5C665F] mt-1 font-sans">
+          <p className="text-xs md:text-sm text-neutral-500 mt-1 font-sans">
             Questions, field notes, and encouragement from the network.
           </p>
         </div>
 
-        <Button
-          variant="primary"
+        <button
           onClick={() => setIsNewTopicOpen(true)}
-          className="gap-2 shrink-0 shadow-sm"
+          className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shadow-xs flex items-center gap-2 border-0 cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4" /> New topic
-        </Button>
+        </button>
       </div>
 
       {/* Category Filter Bar */}
-      <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-[#D4CEC0]">
+      <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-neutral-200">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold font-heading transition ${
+            className={`px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer border ${
               activeCategory === cat
-                ? 'bg-[#176B4D] text-[#FFFDF7] shadow-xs'
-                : 'bg-[#FFFDF7] text-[#24302B] border border-[#D4CEC0] hover:bg-[#E9E4D8]'
+                ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
+                : 'bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50'
             }`}
           >
             {cat}
@@ -124,7 +122,7 @@ const CommunityNoticeboard = () => {
         /* CSS Skeleton Loaders */
         <div className="space-y-4">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="bg-[#FFFDF7] p-6 rounded-2xl border border-[#D4CEC0] space-y-3">
+            <div key={n} className="bg-white p-6 rounded-2xl border border-neutral-200/80 space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl skeleton-pulse shrink-0"></div>
                 <div className="space-y-1.5 flex-1">
@@ -149,31 +147,31 @@ const CommunityNoticeboard = () => {
               <div
                 key={post._id}
                 onClick={() => handleOpenDetail(post)}
-                className="bg-[#FFFDF7] p-6 rounded-2xl border border-[#D4CEC0] space-y-4 shadow-xs hover:border-[#176B4D] transition cursor-pointer"
+                className="bg-white p-6 rounded-2xl border border-neutral-200/80 space-y-4 shadow-xs hover:border-emerald-200 hover:shadow-md transition cursor-pointer"
               >
                 {/* Header Row */}
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
                     {/* Avatar Box */}
-                    <div className="w-10 h-10 rounded-xl bg-[#F0D4C3] text-[#C96B3C] font-extrabold text-sm flex items-center justify-center font-mono shrink-0 border border-[#C96B3C]/20">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 font-bold text-sm flex items-center justify-center font-mono shrink-0 border border-emerald-200">
                       {getInitial(authorName)}
                     </div>
 
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold font-heading text-[#24302B]">{authorName}</span>
+                        <span className="text-xs font-bold font-heading text-neutral-900">{authorName}</span>
                         <Badge role={authorRole} className="text-[9px] py-0 px-1.5">{authorRole}</Badge>
-                        <span className="text-xs text-[#5C665F]">• {postDate}</span>
+                        <span className="text-xs text-neutral-400">• {postDate}</span>
                       </div>
-                      <span className="text-[10px] font-mono text-[#C96B3C] bg-[#E9E4D8] px-2 py-0.5 rounded font-semibold inline-block mt-0.5">
+                      <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 uppercase inline-block mt-1">
                         {post.category || 'Field Notes'}
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-[#5C665F] bg-[#F5F1E8] px-3 py-1 rounded-full border border-[#D4CEC0] flex items-center gap-1.5">
-                      <MessageCircle className="w-3.5 h-3.5 text-[#176B4D]" />
+                    <span className="text-xs font-mono font-semibold text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200 flex items-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                       {repliesCount} {repliesCount === 1 ? 'reply' : 'replies'}
                     </span>
 
@@ -181,7 +179,7 @@ const CommunityNoticeboard = () => {
                     {isPrivileged && (
                       <button
                         onClick={(e) => handleDeletePost(e, post._id)}
-                        className="p-1.5 text-[#5C665F] hover:text-[#C96B3C] rounded-lg hover:bg-[#F0D4C3] transition"
+                        className="p-1.5 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
                         title="Delete Thread"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -192,10 +190,10 @@ const CommunityNoticeboard = () => {
 
                 {/* Content Preview */}
                 <div className="space-y-1">
-                  <h3 className="text-base font-bold font-heading text-[#24302B] leading-snug hover:text-[#176B4D] transition">
+                  <h3 className="text-base font-bold font-heading text-neutral-900 leading-snug hover:text-emerald-700 transition">
                     {post.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-[#5C665F] line-clamp-2 leading-relaxed font-sans">
+                  <p className="text-xs md:text-sm text-neutral-600 line-clamp-2 leading-relaxed font-sans">
                     {post.body}
                   </p>
                 </div>
@@ -204,10 +202,10 @@ const CommunityNoticeboard = () => {
           })}
         </div>
       ) : (
-        <div className="p-12 text-center bg-[#FFFDF7] rounded-2xl border border-[#D4CEC0] space-y-3">
-          <MessageSquare className="w-10 h-10 text-[#5C665F]/50 mx-auto" />
-          <p className="text-sm font-semibold font-heading text-[#24302B]">No topics in this category yet.</p>
-          <p className="text-xs text-[#5C665F]">Be the first to share field notes or ask questions!</p>
+        <div className="p-12 text-center bg-white rounded-2xl border border-neutral-200/80 space-y-3 shadow-xs">
+          <MessageSquare className="w-10 h-10 text-neutral-400 mx-auto" />
+          <p className="text-sm font-semibold font-heading text-neutral-900">No topics in this category yet.</p>
+          <p className="text-xs text-neutral-500">Be the first to share field notes or ask questions!</p>
         </div>
       )}
 

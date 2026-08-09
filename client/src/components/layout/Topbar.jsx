@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, User as UserIcon, ChevronDown, LogOut, ShieldCheck, Mail } from 'lucide-react';
+import { Menu, User as UserIcon, ChevronDown, LogOut, Mail } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Topbar = ({ onMenuClick }) => {
@@ -47,8 +47,8 @@ const Topbar = ({ onMenuClick }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-20 bg-surface/90 backdrop-blur-md border-b border-line-border px-6 py-3.5 flex items-center justify-between">
-      {/* Left Mobile Menu Toggle */}
+    <header className="sticky top-0 z-20 bg-surface/90 backdrop-blur-md border-b border-line-border px-6 py-3 flex items-center justify-between">
+      {/* Left Mobile Menu Toggle & NGO Header Title */}
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
@@ -58,9 +58,14 @@ const Topbar = ({ onMenuClick }) => {
           <Menu className="w-5 h-5" />
         </button>
 
-        <h1 className="text-base md:text-lg font-bold font-heading text-ink hidden sm:block">
-          Humanity First LMS
-        </h1>
+        <div className="flex flex-col justify-center">
+          <h1 className="text-base font-bold text-neutral-900 leading-tight">
+            Humanity First NGO Academy
+          </h1>
+          <p className="text-xs text-neutral-500 font-medium hidden md:block mt-0.5">
+            Volunteer orientation and field training portal.
+          </p>
+        </div>
       </div>
 
       {/* Right User Profile Card & Dropdown */}

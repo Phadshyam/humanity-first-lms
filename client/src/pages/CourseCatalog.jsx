@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   BookOpen, 
   Plus, 
   Edit3, 
   Trash2, 
-  CheckCircle2, 
   RotateCcw, 
-  Sparkles, 
   ArrowRight,
-  X
+  X,
+  Clock
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
-import Badge from '../components/common/Badge';
 
 const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuccess }) => {
   const [number, setNumber] = useState('');
@@ -105,22 +103,22 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#24302B]/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-[#FFFDF7] rounded-2xl border border-[#D4CEC0] w-full max-w-xl p-6 space-y-6 shadow-xl my-8">
-        <div className="flex items-center justify-between border-b border-[#D4CEC0] pb-4">
-          <h3 className="text-lg font-bold font-heading text-[#24302B]">
+    <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl border border-neutral-200 w-full max-w-xl p-6 space-y-6 shadow-xl my-8">
+        <div className="flex items-center justify-between border-b border-neutral-200 pb-4">
+          <h3 className="text-lg font-bold font-heading text-neutral-900">
             {isEditing ? 'Edit Program Module' : 'Add New Program Module'}
           </h3>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-[#5C665F] hover:bg-[#F5F1E8] transition"
+            className="p-1 rounded-lg text-neutral-500 hover:bg-neutral-100 transition cursor-pointer border-0 bg-transparent"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-[#F5D8D5] text-[#A94442] text-xs font-sans border border-[#E8B4B0]">
+          <div className="p-3 rounded-xl bg-red-50 text-red-700 text-xs font-sans border border-red-200">
             {error}
           </div>
         )}
@@ -128,7 +126,7 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
         <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+              <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
                 Module Number (e.g. 01)
               </label>
               <input
@@ -136,11 +134,11 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
                 placeholder="01"
-                className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+                className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+              <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
                 Category / Type
               </label>
               <input
@@ -148,13 +146,13 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
                 value={type}
                 onChange={(e) => setType(e.target.value)}
                 placeholder="Orientation, Safety, Ethics"
-                className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+                className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+            <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
               Module Title *
             </label>
             <input
@@ -163,12 +161,12 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g., Introduction to Non-Profit Work"
-              className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans font-bold"
+              className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans font-bold outline-none focus:border-emerald-600"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+            <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
               Brief Description *
             </label>
             <textarea
@@ -177,24 +175,24 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Short summary of module goals..."
-              className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+              className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+              <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
                 Duration (Minutes)
               </label>
               <input
                 type="number"
                 value={durationMinutes}
                 onChange={(e) => setDurationMinutes(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+                className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+              <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
                 YouTube Embed URL
               </label>
               <input
@@ -202,13 +200,13 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
                 value={youtubeUrl}
                 onChange={(e) => setYoutubeUrl(e.target.value)}
                 placeholder="https://www.youtube.com/embed/..."
-                className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+                className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+            <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
               Key Takeaways (one per line)
             </label>
             <textarea
@@ -216,12 +214,12 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
               value={keyTakeawaysText}
               onChange={(e) => setKeyTakeawaysText(e.target.value)}
               placeholder="Key point 1&#10;Key point 2"
-              className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+              className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold font-heading uppercase text-[#5C665F] mb-1">
+            <label className="block text-xs font-bold font-heading uppercase text-neutral-600 mb-1">
               Full Lesson Content & Field Notes
             </label>
             <textarea
@@ -229,7 +227,7 @@ const CourseCatalogModal = ({ isOpen, onClose, moduleToEdit, courseId, onSaveSuc
               value={fullContent}
               onChange={(e) => setFullContent(e.target.value)}
               placeholder="Enter multi-paragraph study notes, operational guidelines, and protocols..."
-              className="w-full px-3 py-2 rounded-xl border border-[#D4CEC0] bg-[#F5F1E8] text-[#24302B] text-xs font-sans"
+              className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-800 text-xs font-sans outline-none focus:border-emerald-600"
             />
           </div>
 
@@ -326,6 +324,9 @@ const CourseCatalog = () => {
   const totalModulesCount = modulesList.length;
   const progressPercent = totalModulesCount > 0 ? Math.round((completedCount / totalModulesCount) * 100) : 0;
 
+  // Logic: Find first uncompleted module for In Progress status
+  const nextUncompletedModule = modulesList.find(m => !isModuleCompleted(m._id));
+
   const handleOpenAddModal = () => {
     setModuleToEdit(null);
     setIsModalOpen(true);
@@ -355,46 +356,48 @@ const CourseCatalog = () => {
   return (
     <div className="space-y-8 bg-[#F5F1E8] min-h-screen text-[#24302B]">
       {/* Course Header Banner */}
-      <div className="bg-[#FFFDF7] p-6 md:p-8 rounded-2xl border border-[#D4CEC0] space-y-4 shadow-xs">
+      <div className="bg-white p-6 md:p-8 rounded-2xl border border-neutral-200/80 space-y-4 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-mono font-extrabold text-[#C96B3C] uppercase tracking-wider">
-              ORIENTATION CURRICULUM
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 font-semibold text-xs rounded-full uppercase tracking-wider inline-block">
+              Orientation Curriculum
             </span>
-            <h1 className="text-2xl md:text-3xl font-extrabold font-heading text-[#24302B] mt-0.5">
+            <h1 className="text-2xl font-bold text-neutral-900 mt-3">
               {activeCourse ? activeCourse.title : 'NGO Volunteer Orientation & Field Readiness Program'}
             </h1>
-            <p className="text-xs md:text-sm text-[#5C665F] mt-1 font-sans max-w-3xl">
+            <p className="text-xs md:text-sm text-neutral-500 mt-1 font-sans max-w-3xl leading-relaxed">
               {activeCourse ? activeCourse.description : 'Equip yourself with core humanitarian values, safeguarding policies, field safety protocols, and emergency response skills.'}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <Button
-              variant="quiet"
-              size="sm"
-              onClick={handleResetProgress}
-              disabled={resetting}
-              className="gap-1 text-xs"
-            >
-              <RotateCcw className="w-3.5 h-3.5" /> {resetting ? 'Resetting...' : 'Reset Progress (0%)'}
-            </Button>
-          </div>
+          {progressPercent > 0 && (
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleResetProgress}
+                disabled={resetting}
+                className="px-3.5 py-1.5 text-xs font-medium text-neutral-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors flex items-center gap-1.5 border-0 cursor-pointer disabled:opacity-50"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>{resetting ? 'Resetting...' : 'Reset Progress (0%)'}</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Course Progress Summary Bar */}
-        <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#D4CEC0]">
-          <span className="text-[#5C665F]">
-            OVERALL PROGRESS: <strong className="text-[#176B4D]">{completedCount} / {totalModulesCount} MODULES ({progressPercent}%)</strong>
+        <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-neutral-100">
+          <span className="text-neutral-500 font-medium">
+            OVERALL PROGRESS: <strong className="text-emerald-700">{completedCount} / {totalModulesCount} MODULES ({progressPercent}%)</strong>
           </span>
-          <span className="text-[#C96B3C] font-bold">
+          <span className="text-amber-700 font-bold">
             {progressPercent === 100 ? '✓ CERTIFICATE UNLOCKED' : `${totalModulesCount - completedCount} REMAINING`}
           </span>
         </div>
 
-        <div className="w-full bg-[#E9E4D8] h-3 rounded-full overflow-hidden">
+        {/* Progress Bar Track */}
+        <div className="w-full h-2.5 bg-neutral-100 rounded-full overflow-hidden mt-3">
           <div 
-            className="bg-[#176B4D] h-full transition-all duration-500 rounded-full"
+            className="h-full bg-emerald-600 transition-all duration-500 rounded-full"
             style={{ width: `${progressPercent}%` }}
           ></div>
         </div>
@@ -403,21 +406,19 @@ const CourseCatalog = () => {
       {/* Module List Section Header */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold font-heading text-[#24302B] flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-[#176B4D]" /> 
+          <h2 className="text-xl font-bold font-heading text-neutral-900 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-emerald-600" /> 
             Program Modules ({totalModulesCount})
           </h2>
 
           {/* Privilege Add Module Button */}
           {isPrivileged && activeCourse && (
-            <Button
-              variant="primary"
-              size="sm"
+            <button
               onClick={handleOpenAddModal}
-              className="gap-1.5 shadow-xs"
+              className="bg-emerald-700 hover:bg-emerald-800 text-white font-medium px-4 py-2 rounded-lg text-sm shadow-xs transition-colors flex items-center gap-2 border-0 cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Module
-            </Button>
+            </button>
           )}
         </div>
 
@@ -425,7 +426,7 @@ const CourseCatalog = () => {
           /* Animated CSS Skeleton Pulse Loaders */
           <div className="space-y-3">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="bg-[#FFFDF7] p-5 rounded-2xl border border-[#D4CEC0] flex items-center justify-between gap-4">
+              <div key={n} className="bg-white p-5 rounded-xl border border-neutral-200/80 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4 flex-1">
                   <div className="w-12 h-12 rounded-xl skeleton-pulse shrink-0"></div>
                   <div className="space-y-2 flex-1">
@@ -441,66 +442,74 @@ const CourseCatalog = () => {
           <div className="space-y-3">
             {modulesList.map((mod, idx) => {
               const completed = isModuleCompleted(mod._id);
+              const isNextUp = !completed && nextUncompletedModule && (nextUncompletedModule._id === mod._id);
 
               return (
                 <div
                   key={mod._id || idx}
                   onClick={() => navigate(`/module/${mod._id}`)}
-                  className={`bg-[#FFFDF7] p-5 rounded-2xl border transition shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:border-[#176B4D] hover:shadow-md ${
-                    completed ? 'border-[#176B4D]/40 bg-[#D8E8DD]/20' : 'border-[#D4CEC0]'
+                  className={`bg-white border border-neutral-200/80 hover:border-emerald-200 rounded-xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer ${
+                    completed ? 'bg-emerald-50/30' : ''
                   }`}
                 >
                   <div className="flex items-start md:items-center gap-4">
-                    {/* Terracotta Number Badge */}
-                    <div className="w-12 h-12 rounded-xl bg-[#F0D4C3] text-[#C96B3C] font-mono font-extrabold text-sm flex items-center justify-center shrink-0 border border-[#C96B3C]/20">
-                      {mod.number || `0${idx + 1}`}
-                    </div>
-
-                    {/* Dynamic Row Icon */}
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                      completed ? 'bg-[#D8E8DD] text-[#176B4D]' : 'bg-[#E9E4D8] text-[#5C665F]'
-                    }`}>
-                      {completed ? <CheckCircle2 className="w-5 h-5 text-[#176B4D]" /> : <BookOpen className="w-5 h-5 text-[#5C665F]" />}
+                    {/* Consolidated Step Badge */}
+                    <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-base flex items-center justify-center shrink-0 border border-emerald-100/60 font-mono">
+                      {mod.number || (idx < 9 ? `0${idx + 1}` : `${idx + 1}`)}
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-mono font-extrabold text-[#C96B3C] bg-[#E9E4D8] px-2 py-0.5 rounded uppercase">
+                        {/* Category Pill */}
+                        <span className="px-2.5 py-0.5 bg-neutral-100 text-neutral-700 font-medium text-xs rounded-md uppercase">
                           {mod.type || 'Orientation'}
                         </span>
-                        {completed && (
-                          <span className="text-[10px] font-mono font-bold text-[#176B4D] bg-[#D8E8DD] px-2 py-0.5 rounded">
-                            ✓ Completed
-                          </span>
-                        )}
-                        <span className="text-[11px] font-mono text-[#5C665F]">
+
+                        {/* Duration Pill */}
+                        <span className="text-xs text-neutral-500 font-medium flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-neutral-400" />
                           {mod.durationMinutes || 15} MINS
                         </span>
+
+                        {/* Status Pill */}
+                        {completed ? (
+                          <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            Completed
+                          </span>
+                        ) : isNextUp ? (
+                          <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            In Progress
+                          </span>
+                        ) : (
+                          <span className="bg-neutral-100 text-neutral-600 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            Not Started
+                          </span>
+                        )}
                       </div>
 
-                      <h3 className="text-base font-bold font-heading text-[#24302B]">
+                      <h3 className="text-base font-bold font-heading text-neutral-900">
                         {mod.title}
                       </h3>
-                      <p className="text-xs text-[#5C665F] font-sans line-clamp-1">
+                      <p className="text-xs text-neutral-500 font-sans line-clamp-1">
                         {mod.description}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 self-end md:self-center shrink-0">
-                    {/* Trainer / Admin Edit & Delete Privilege Buttons */}
+                    {/* Admin Action Separation (Edit / Delete) */}
                     {isPrivileged && (
-                      <div className="flex items-center gap-1 mr-2 border-r border-[#D4CEC0] pr-3">
+                      <div className="flex items-center gap-1 mr-2 border-r border-neutral-200 pr-3">
                         <button
                           onClick={(e) => handleOpenEditModal(e, mod)}
-                          className="p-2 rounded-lg text-[#5C665F] hover:bg-[#E9E4D8] hover:text-[#176B4D] transition"
+                          className="p-2 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
                           title="Edit Module"
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={(e) => handleDeleteModule(e, mod._id)}
-                          className="p-2 rounded-lg text-[#5C665F] hover:bg-[#F5D8D5] hover:text-[#A94442] transition"
+                          className="p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
                           title="Delete Module"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -508,27 +517,40 @@ const CourseCatalog = () => {
                       </div>
                     )}
 
-                    <Button
-                      variant={completed ? 'outline' : 'primary'}
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/module/${mod._id}`);
-                      }}
-                      className="gap-1.5"
-                    >
-                      {completed ? 'Review Module' : 'Start Module'} <ArrowRight className="w-3.5 h-3.5" />
-                    </Button>
+                    {/* Primary Action Button (CTA) */}
+                    {completed ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/module/${mod._id}`);
+                        }}
+                        className="bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-medium px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 cursor-pointer"
+                      >
+                        <span>Review Module</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/module/${mod._id}`);
+                        }}
+                        className="bg-emerald-700 hover:bg-emerald-800 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 shadow-xs border-0 cursor-pointer"
+                      >
+                        <span>{isNextUp ? 'Continue' : 'Start Module'}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
                 </div>
               );
             })}
           </div>
         ) : (
-          <div className="bg-[#FFFDF7] p-8 rounded-2xl border border-[#D4CEC0] text-center space-y-3">
-            <BookOpen className="w-10 h-10 text-[#5C665F] mx-auto" />
-            <h3 className="text-base font-bold font-heading text-[#24302B]">No orientation modules available yet.</h3>
-            <p className="text-xs text-[#5C665F]">New learning modules will appear here once published by trainers.</p>
+          <div className="bg-white p-8 rounded-2xl border border-neutral-200/80 text-center space-y-3 shadow-xs">
+            <BookOpen className="w-10 h-10 text-neutral-400 mx-auto" />
+            <h3 className="text-base font-bold font-heading text-neutral-900">No orientation modules available yet.</h3>
+            <p className="text-xs text-neutral-500">New learning modules will appear here once published by trainers.</p>
           </div>
         )}
       </div>

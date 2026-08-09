@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpen, Plus, Trash2, Clock } from 'lucide-react';
 import api from '../../services/api';
-import Button from '../common/Button';
 import AddModuleModal from './AddModuleModal';
 
 const ContentManager = ({ course, onCourseUpdated }) => {
@@ -28,40 +27,43 @@ const ContentManager = ({ course, onCourseUpdated }) => {
   const modules = course && course.modules ? course.modules : [];
 
   return (
-    <div className="bg-surface p-6 rounded-2xl border border-line-border space-y-4 shadow-xs">
+    <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 space-y-4 shadow-xs">
       <div className="flex items-center justify-between">
-        <h3 className="text-base font-extrabold font-heading text-ink flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-forest-green" /> Course modules
+        <h3 className="text-base font-bold font-heading text-neutral-900 flex items-center gap-2">
+          <BookOpen className="w-5 h-5 text-emerald-700" /> Course modules
         </h3>
 
         {course && (
-          <Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)} className="gap-1 text-xs">
-            <Plus className="w-3.5 h-3.5" /> Add module
-          </Button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3.5 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-1.5 border-0 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" /> Add Module
+          </button>
         )}
       </div>
 
-      <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+      <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1">
         {modules.length > 0 ? (
           modules.map((mod, idx) => (
             <div
               key={mod._id || idx}
-              className="p-3.5 rounded-xl bg-bg-warm border border-line-border flex items-center justify-between gap-3 text-xs"
+              className="bg-white border border-neutral-200/80 hover:border-emerald-200 rounded-xl p-4 shadow-xs flex items-center justify-between gap-3 transition-all"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <span className="w-7 h-7 rounded-lg bg-alt-bg text-ink font-mono font-bold flex items-center justify-center shrink-0">
-                  {mod.number || `0${idx + 1}`}
+                <span className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-xs flex items-center justify-center shrink-0 font-mono">
+                  {mod.number || (idx < 9 ? `0${idx + 1}` : `${idx + 1}`)}
                 </span>
 
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="font-bold font-heading text-ink truncate">{mod.title}</h4>
-                    <span className="px-2 py-0.5 rounded bg-surface text-[9px] font-mono font-bold text-muted-text border border-line-border shrink-0">
+                    <h4 className="font-bold font-heading text-neutral-900 truncate text-sm">{mod.title}</h4>
+                    <span className="px-2 py-0.5 rounded bg-neutral-100 text-[10px] font-medium text-neutral-600 border border-neutral-200 uppercase shrink-0">
                       {mod.type || 'Orientation'}
                     </span>
                   </div>
-                  <p className="text-[11px] text-muted-text flex items-center gap-1 font-mono mt-0.5">
-                    <Clock className="w-3 h-3" /> {mod.durationMinutes || 15} mins
+                  <p className="text-xs text-neutral-500 flex items-center gap-1 font-sans mt-0.5">
+                    <Clock className="w-3.5 h-3.5 text-neutral-400" /> {mod.durationMinutes || 15} mins
                   </p>
                 </div>
               </div>
@@ -69,7 +71,7 @@ const ContentManager = ({ course, onCourseUpdated }) => {
               <button
                 onClick={() => handleDeleteModule(mod._id)}
                 disabled={deletingId === mod._id}
-                className="p-1.5 text-muted-text hover:text-terracotta rounded-lg hover:bg-terracotta-soft transition shrink-0"
+                className="p-1.5 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border-0 bg-transparent shrink-0"
                 title="Delete Module"
               >
                 <Trash2 className="w-4 h-4" />
@@ -77,7 +79,7 @@ const ContentManager = ({ course, onCourseUpdated }) => {
             </div>
           ))
         ) : (
-          <div className="p-6 text-center text-xs text-muted-text bg-bg-warm rounded-xl border border-line-border">
+          <div className="p-6 text-center text-xs text-neutral-500 bg-neutral-50 rounded-xl border border-neutral-200/80">
             No course modules currently created.
           </div>
         )}
