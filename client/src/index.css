@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  body {
+    background-color: #F5F1E8;
+    color: #24302B;
+    font-family: 'Noto Sans', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Noto Sans', sans-serif;
+  }
+}
+
+/* Custom Skeleton Pulse Utility */
+.skeleton-pulse {
+  background-color: #E9E4D8;
+  animation: pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Print Stylesheet for Certificate Generation */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .no-print,
+  nav,
+  aside,
+  header,
+  .sidebar,
+  .topbar,
+  button {
+    display: none !important;
+  }
+
+  .md\:ml-\[248px\] {
+    margin-left: 0 !important;
+  }
+
+  main,
+  .workspace,
+  .page-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .certificate-paper {
+    border-width: 6px !important;
+    border-style: double !important;
+    border-color: #176B4D !important;
+    background-color: #FFFDF7 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    page-break-inside: avoid;
+  }
+}
