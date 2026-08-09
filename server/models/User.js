@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['volunteer', 'trainer', 'admin'],
+      enum: ['volunteer', 'field_worker', 'trainer', 'admin'],
       default: 'volunteer'
     },
     preferredLanguage: {

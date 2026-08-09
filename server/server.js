@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
 dotenv.config();
 
@@ -28,50 +29,35 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Database Connection with Serverless Cache & Embedded In-Memory Fallback
-let mongoMemoryServer;
-
-const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) {
-    return;
-  }
-
-  const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/ngo_lms';
-
-  try {
-    await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 2500 });
-    console.log(`[Database] Connected to MongoDB at ${mongoUri}`);
-  } catch (err) {
-    console.warn(`[Database Warning] Local MongoDB connection at ${mongoUri} failed (${err.message}). Booting Embedded In-Memory MongoDB...`);
-    try {
-      const { MongoMemoryServer } = require('mongodb-memory-server');
-      mongoMemoryServer = await MongoMemoryServer.create();
-      const memUri = mongoMemoryServer.getUri();
-      await mongoose.connect(memUri);
-      console.log(`[Database] Connected to Embedded In-Memory MongoDB Server at ${memUri}`);
-    } catch (memErr) {
-      console.error(`[Database Error] Embedded In-Memory MongoDB Server failed to boot: ${memErr.message}`);
-    }
-  }
-
-  // Auto-seed initial accounts and course data if database is empty
-  try {
-    const User = require('./models/User');
-    const { runSeedLogic } = require('./utils/seedData');
-    const userCount = await User.countDocuments();
-    if (userCount === 0) {
-      console.log('[Auto-Seed] Database is empty. Auto-seeding initial accounts and 8 orientation modules...');
-      await runSeedLogic();
-    }
-  } catch (seedErr) {
-    console.error('[Auto-Seed Error] Failed to auto-seed initial database:', seedErr.message);
-  }
-};
-
 // Middleware to ensure DB is connected for serverless invocations
 app.use(async (req, res, next) => {
-  await connectDB();
-  next();
+  try {
+    await connectDB();
+
+    // Auto-seed initial accounts and course data if database is empty
+    if (mongoose.connection.readyState === 1) {
+      try {
+        const User = require('./models/User');
+        const userCount = await User.countDocuments();
+        if (userCount === 0) {
+          console.log('[Auto-Seed] Database is empty. Auto-seeding initial accounts and 8 orientation modules...');
+          const { runSeedLogic } = require('./utils/seedData');
+          await runSeedLogic();
+        }
+      } catch (seedErr) {
+        console.error('[Auto-Seed Error] Failed to auto-seed initial database:', seedErr.message);
+      }
+    }
+
+    next();
+  } catch (err) {
+    console.error('[DB Middleware Error]:', err.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Database connection failed. Please verify MONGO_URI in Vercel Environment Variables.',
+      error: err.message
+    });
+  }
 });
 
 // Health Check Endpoint
