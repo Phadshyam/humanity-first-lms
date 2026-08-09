@@ -12,11 +12,13 @@ server/node_modules/
 server/.env
 client/.env
 
-# Production Builds
+# Production Builds & Vite Caches
 dist/
 build/
 client/dist/
 client/build/
+.vite/
+client/.vite/
 
 # Logs
 npm-debug.log*
