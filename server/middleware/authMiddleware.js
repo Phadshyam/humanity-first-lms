@@ -14,18 +14,39 @@ const protect = async (req, res, next) => {
 
       req.user = await User.findById(decoded.id).select('-password');
       if (!req.user) {
-        return res.status(401).json({ success: false, message: 'User account no longer exists' });
+        return res.status(401).json({
+          success: false,
+          code: 'USER_NOT_FOUND',
+          message: 'User account no longer exists.'
+        });
       }
 
       return next();
     } catch (error) {
       console.error('[Auth Middleware] Token verification failed:', error.message);
-      return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({
+          success: false,
+          code: 'TOKEN_EXPIRED',
+          message: 'Your 3-hour session has expired. Please log in again.'
+        });
+      }
+
+      return res.status(401).json({
+        success: false,
+        code: 'TOKEN_INVALID',
+        message: 'Invalid session token. Access denied.'
+      });
     }
   }
 
   if (!token) {
-    return res.status(401).json({ success: false, message: 'Not authorized, no token provided' });
+    return res.status(401).json({
+      success: false,
+      code: 'NO_TOKEN',
+      message: 'Not authorized, no token provided.'
+    });
   }
 };
 

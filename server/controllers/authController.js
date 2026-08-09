@@ -1,6 +1,9 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
+// Password complexity regex: at least 8 chars, at least one number or special character
+const passwordRegex = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
@@ -12,6 +15,13 @@ const registerUser = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Please provide name, email, and password'
+      });
+    }
+
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long and contain at least one number or special character.'
       });
     }
 
@@ -41,7 +51,7 @@ const registerUser = async (req, res) => {
         email: user.email,
         role: user.role,
         preferredLanguage: user.preferredLanguage,
-        token: generateToken(user._id)
+        token: generateToken(user._id, user.role)
       }
     });
   } catch (error) {
@@ -93,7 +103,7 @@ const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
         preferredLanguage: user.preferredLanguage,
-        token: generateToken(user._id)
+        token: generateToken(user._id, user.role)
       }
     });
   } catch (error) {
@@ -110,7 +120,7 @@ const loginUser = async (req, res) => {
 // @access  Private (Protected)
 const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).select('-password');
 
     return res.status(200).json({
       success: true,

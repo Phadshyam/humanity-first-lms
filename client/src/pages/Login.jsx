@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, ShieldCheck, UserCheck } from 'lucide-react';
+import { ArrowRight, ShieldCheck, UserCheck, AlertTriangle } from 'lucide-react';
 
 const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
@@ -13,6 +13,8 @@ const Login = () => {
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [searchParams] = useSearchParams();
+    const isSessionExpired = searchParams.get('sessionExpired') === 'true';
 
     const { login, register } = useAuth();
     const navigate = useNavigate();
@@ -103,6 +105,14 @@ const Login = () => {
                             : 'Your next useful step is waiting.'}
                     </p>
 
+                    {/* Session Expired Warning Banner */}
+                    {isSessionExpired && !error && (
+                        <div className="bg-[#FFF3CD] text-[#856404] p-3.5 text-xs font-semibold rounded-xl mb-4 border border-[#FFEEBA] flex items-center gap-2 shadow-xs">
+                            <AlertTriangle className="w-4 h-4 text-[#856404] shrink-0" />
+                            <span>Your 3-hour session expired. Please log in to continue.</span>
+                        </div>
+                    )}
+
                     {error && (
                         <div className="bg-[#F5D8D5] text-[#A94442] p-3 text-sm rounded mb-4 border border-[#E8B4B0]">
                             {error}
@@ -144,7 +154,7 @@ const Login = () => {
                                 type="password"
                                 name="password"
                                 required
-                                placeholder="8 characters minimum"
+                                placeholder="8 characters minimum (with a number or symbol)"
                                 value={formData.password}
                                 onChange={handleChange}
                                 className="w-full p-3 bg-[#FFFDF7] border border-[#D4CEC0] rounded text-sm outline-none focus:border-[#176B4D]"

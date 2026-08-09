@@ -31,5 +31,5 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Diagnostic Logs
-docs/SYNC_DIAGNOSTICS.md
+# Documentation & Diagnostics
+docs/

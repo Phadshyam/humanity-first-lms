@@ -22,13 +22,25 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor for global auth error handling
+// Response interceptor for global auth error handling & 3-hour session expiration
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // If unauthorized response received from protected route, clear stored token
+    const isUnauthorized = error.response && error.response.status === 401;
+    const isTokenExpired = error.response?.data?.code === 'TOKEN_EXPIRED';
+
+    if (isUnauthorized || isTokenExpired) {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('demoUser');
+
+      // Dispatch custom session expiration event
+      window.dispatchEvent(new CustomEvent('auth:session-expired'));
+
+      // Redirect to login with sessionExpired query flag if not already on login page
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.href = '/login?sessionExpired=true';
+      }
     }
     return Promise.reject(error);
   }
