@@ -61,34 +61,52 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Root Endpoint
-app.get('/', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    message: 'Humanity First LMS API Server is operational',
-    databaseState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-    hasMongoUriEnv: !!process.env.MONGO_URI,
-    endpoints: {
-      health: '/api/health',
-      auth: '/api/auth',
-      courses: '/api/courses',
-      quizzes: '/api/quizzes',
-      progress: '/api/progress',
-      admin: '/api/admin',
-      forum: '/api/forum'
-    }
-  });
+// Root API Welcome / Health Check Endpoint
+app.get('/', async (req, res) => {
+  try {
+    await connectDB();
+    return res.status(200).json({
+      status: 'OK',
+      message: 'Humanity First LMS API Server is operational',
+      databaseState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+      hasMongoUriEnv: !!process.env.MONGO_URI,
+      endpoints: {
+        health: '/api/health',
+        auth: '/api/auth',
+        courses: '/api/courses',
+        quizzes: '/api/quizzes',
+        progress: '/api/progress',
+        admin: '/api/admin',
+        forum: '/api/forum'
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'ERROR',
+      message: 'Database connection failed',
+      error: error.message
+    });
+  }
 });
 
-// Health Check Endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    message: 'Humanity First LMS API Server is operational',
-    databaseState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-    hasMongoUriEnv: !!process.env.MONGO_URI,
-    timestamp: new Date()
-  });
+// Dedicated /api/health Endpoint
+app.get('/api/health', async (req, res) => {
+  try {
+    await connectDB();
+    return res.status(200).json({
+      status: 'OK',
+      message: 'Humanity First LMS API Server is operational',
+      databaseState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+      hasMongoUriEnv: !!process.env.MONGO_URI,
+      timestamp: new Date()
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'ERROR',
+      message: 'Database connection failed',
+      error: error.message
+    });
+  }
 });
 
 // Route Mounts
