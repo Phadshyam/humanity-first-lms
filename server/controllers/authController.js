@@ -25,9 +25,9 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const cleanEmail = email.toLowerCase().trim();
+    const normalizedEmail = email.toLowerCase().trim();
 
-    const userExists = await User.findOne({ email: cleanEmail });
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
       return res.status(400).json({
         success: false,
@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
 
     const user = await User.create({
       name,
-      email: cleanEmail,
+      email: normalizedEmail,
       password,
       role: role || 'volunteer',
       preferredLanguage: preferredLanguage || 'EN'
@@ -77,18 +77,11 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const cleanEmail = email.toLowerCase().trim();
+    const normalizedEmail = email.toLowerCase().trim();
 
-    const user = await User.findOne({ email: cleanEmail }).select('+password');
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid email or password'
-      });
-    }
-
-    const isMatch = await user.matchPassword(password);
-    if (!isMatch) {
+    // Explicitly select password field to enable matchPassword comparison
+    const user = await User.findOne({ email: normalizedEmail }).select('+password');
+    if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password'
