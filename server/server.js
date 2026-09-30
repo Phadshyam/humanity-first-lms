@@ -54,9 +54,14 @@ app.use(async (req, res, next) => {
     console.error('[DB Middleware Error]:', err.message);
     return res.status(500).json({
       success: false,
-      message: 'Database connection failed. Please set MONGO_URI in Vercel Environment Variables.',
+      message: 'Database connection failed. Please verify MONGO_URI in Vercel Environment Variables.',
       error: err.message,
-      hasMongoUri: !!process.env.MONGO_URI
+      debug: {
+        hasMongoUri: !!process.env.MONGO_URI,
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        nodeEnv: process.env.NODE_ENV,
+        isVercel: !!process.env.VERCEL
+      }
     });
   }
 });
