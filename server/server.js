@@ -135,7 +135,7 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
 });
 
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+if (require.main === module) {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`[Server] Humanity First LMS Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
